@@ -50,7 +50,7 @@
             uploadBtnLabel = $element.find(settings.clickable + ' .upload-btn-label'),
             uploaded = 0,
             count = 0;
-        var labelDefault = uploadBtnLabel.html();
+        var labelDefault = uploadBtnLabel.text();
 
         previewNode.id = "";
         previewNode.parentNode.removeChild(previewNode);
@@ -72,13 +72,18 @@
             //this.removeFile(file);
         });
         myDropzone.on("totaluploadprogress", function(progress) {
-            liveLabel(labelProcess);
+            if (!settings.autoQueue) {
+                uploaded = count - myDropzone.getFilesWithStatus(Dropzone.UPLOADING).length;
+                uploadBtnLabel.text(labelProcess + ' ' + uploaded + '/' + count);
+            } else {
+                uploadBtnLabel.text(labelProcess)
+            }
         });
         myDropzone.on("sending", function(file) {
             // @TODO show preloader
         });
         myDropzone.on("queuecomplete", function(progress) {
-            liveLabel(labelDefault);
+            uploadBtnLabel.text(labelDefault);
             // @TODO hide preloader
         });
 
@@ -95,15 +100,6 @@
                 myDropzone.removeAllFiles(true);
                 uploadBtnLabel.text(labelDefault);
             };
-        }
-
-        function liveLabel(label) {
-            if (!settings.autoQueue) {
-                uploaded = count - myDropzone.getFilesWithStatus(Dropzone.UPLOADING).length;
-                uploadBtnLabel.text(label + ' ' + uploaded + '/' + count);
-            } else {
-                uploadBtnLabel.text(label)
-            }
         }
     };
 
