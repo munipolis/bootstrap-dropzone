@@ -119,6 +119,7 @@ class BootstrapDropzone extends Nette\Application\UI\Control
     public function render()
     {
         $template = $this->createTemplate();
+        $template->setTranslator($this->getTranslator());
         $template->setFile(dirname(__FILE__) . '/' . $this->bdTemplate);
         $template->settings = json_encode([
             'thumbnailWidth' => $this->getThumbnailWidth(),
