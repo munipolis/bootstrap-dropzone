@@ -47,7 +47,7 @@
             labelChosen = $element.data('vojtys-dropzone-chosen'),
             labelUploaded = $element.data('vojtys-dropzone-uploaded'),
             labelProcess = $element.data('vojtys-dropzone-process'),
-            uploadBtnLabel = $element.find(settings.clickable + ' span'),
+            uploadBtnLabel = $element.find(settings.clickable + ' .upload-btn-label'),
             uploaded = 0,
             count = 0;
         var labelDefault = uploadBtnLabel.html();
