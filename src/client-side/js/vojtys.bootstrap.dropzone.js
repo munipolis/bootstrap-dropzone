@@ -81,13 +81,21 @@
             liveLabel(labelUploaded);
             // @TODO hide preloader
         });
-        document.querySelector('#' + id + ' .start').onclick = function() {
-            myDropzone.enqueueFiles(myDropzone.getFilesWithStatus(Dropzone.ADDED));
-        };
-        document.querySelector('#' + id + ' .cancel').onclick = function() {
-            myDropzone.removeAllFiles(true);
-            uploadBtnLabel.text(labelDefault);
-        };
+
+        var startBtn = document.querySelector('#' + id + ' .start');
+        if (startBtn !== null) {
+            startBtn.onclick = function() {
+                myDropzone.enqueueFiles(myDropzone.getFilesWithStatus(Dropzone.ADDED));
+            };
+        }
+
+        var cancelBtn = document.querySelector('#' + id + ' .cancel');
+        if (cancelBtn !== null) {
+            cancelBtn.onclick = function() {
+                myDropzone.removeAllFiles(true);
+                uploadBtnLabel.text(labelDefault);
+            };
+        }
 
         function liveLabel(label) {
             if (!settings.autoQueue) {
