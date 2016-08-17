@@ -34,6 +34,7 @@ class BootstrapDropzonePanel extends Nette\Application\UI\Control
     public function render()
     {
         $template = $this->createTemplate();
+        $template->setTranslator($this->getTranslator());
         $template->setFile($this->getPanelTemplate());
         $template->id = $this->id;
         if (!is_null($this->translator)) {

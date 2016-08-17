@@ -91,7 +91,7 @@ class BootstrapDropzone extends Nette\Application\UI\Control
     protected $id;
 
     /** @var  Nette\Localization\ITranslator */
-    protected $translator;
+    protected $translator = NULL;
 
     /** @var callable  */
     public $onFileUpload = [];
@@ -183,7 +183,7 @@ class BootstrapDropzone extends Nette\Application\UI\Control
      */
     public function createComponentPreview()
     {
-        $preview = new BootstrapDropzonePreview();
+        $preview = new BootstrapDropzonePreview($this->getTranslator());
         if (!$this->isPreviewDisabled()) {
             $preview->setPreviewTemplate($this->getPreviewTemplate());
         }
@@ -195,7 +195,7 @@ class BootstrapDropzone extends Nette\Application\UI\Control
      */
     public function createComponentPanel()
     {
-        $panel = new BootstrapDropzonePanel($this->id);
+        $panel = new BootstrapDropzonePanel($this->id, $this->getTranslator());
         return $panel->setPanelTemplate($this->getPanelTemplate());
     }
 
