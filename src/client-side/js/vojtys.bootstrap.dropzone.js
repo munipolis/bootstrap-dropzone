@@ -78,7 +78,7 @@
             // @TODO show preloader
         });
         myDropzone.on("queuecomplete", function(progress) {
-            liveLabel(labelUploaded);
+            liveLabel(labelDefault);
             // @TODO hide preloader
         });
 
