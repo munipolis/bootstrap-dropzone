@@ -43,6 +43,7 @@
         var settings = $element.data('vojtys-dropzone-settings');
         var previewNode = document.querySelector('#' + id + '-vojtys-dropzone-template');
         var previewTemplate = previewNode.parentNode.innerHTML,
+            uploadSuccess = $element.data('vojtys-dropzone-success'),
             labelFiles = $element.data('vojtys-dropzone-files'),
             labelChosen = $element.data('vojtys-dropzone-chosen'),
             labelUploaded = $element.data('vojtys-dropzone-uploaded'),
@@ -83,6 +84,9 @@
             // @TODO show preloader
         });
         myDropzone.on("queuecomplete", function(progress) {
+            $.nette.ajax({
+                url: uploadSuccess
+            });
             uploadBtnLabel.text(labelDefault);
             // @TODO hide preloader
         });

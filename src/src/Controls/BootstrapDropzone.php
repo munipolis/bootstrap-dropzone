@@ -173,6 +173,18 @@ class BootstrapDropzone extends Nette\Application\UI\Control
         die();
     }
 
+    /**
+     * Files upload success callback
+     */
+    public function handleUploadSuccess()
+    {
+        foreach ($this->onUploadComplete as $callback) {
+            if (is_callable($callback)) {
+                call_user_func($callback);
+            }
+        }
+    }
+
     public function handleRefresh()
     {
         $this->redrawControl();
