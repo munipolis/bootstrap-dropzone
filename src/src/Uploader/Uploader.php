@@ -32,6 +32,7 @@ class Uploader extends Nette\Object implements IUploader
             $uploadPath = $this->wwwDir . $path;
             $mainFile = $uploadPath . time() . '-' . $file->getName();
             move_uploaded_file($tempFile, $mainFile);
+            return $mainFile;
         } catch (\Exception $e) {
             header('HTTP/1.1 500 Internal Server Error');
             header('Content-type: text/plain');

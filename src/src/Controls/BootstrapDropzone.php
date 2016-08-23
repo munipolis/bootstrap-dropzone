@@ -99,6 +99,9 @@ class BootstrapDropzone extends Nette\Application\UI\Control
     /** @var callable */
     public $onUploadComplete = [];
 
+    /** @var array  */
+    protected $uploaded = [];
+
 
     /**
      * BootstrapDropzone constructor.
@@ -160,17 +163,16 @@ class BootstrapDropzone extends Nette\Application\UI\Control
 
             /** @var Nette\Http\FileUpload $fileUpload */
             foreach ($this->request->files as $fileUpload) {
-                $uploader->upload($fileUpload, $this->path);
+                $this->uploaded[] = $file = $uploader->upload($fileUpload, $this->path);
 
                 // on upload file callback
                 foreach ($this->onFileUpload as $callback) {
                     if (is_callable($callback)) {
-                        call_user_func($callback, $fileUpload);
+                        call_user_func($callback, $fileUpload, $file);
                     }
                 }
             }
         }
-        die();
     }
 
     /**
@@ -180,7 +182,7 @@ class BootstrapDropzone extends Nette\Application\UI\Control
     {
         foreach ($this->onUploadComplete as $callback) {
             if (is_callable($callback)) {
-                call_user_func($callback);
+                call_user_func($callback, $this->uploaded);
             }
         }
     }
