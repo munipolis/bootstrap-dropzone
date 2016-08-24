@@ -52,6 +52,7 @@
             uploaded = 0,
             count = 0;
         var labelDefault = uploadBtnLabel.text();
+        var files = [];
 
         previewNode.id = "";
         previewNode.parentNode.removeChild(previewNode);
@@ -65,13 +66,20 @@
             count = myDropzone.getFilesWithStatus(Dropzone.ADDED).length;
             uploadBtnLabel.text(labelChosen + ' ' + count + ' ' + labelFiles);
         });
+
         myDropzone.on("removedfile", function() {
             count = myDropzone.getFilesWithStatus(Dropzone.ADDED).length;
             uploadBtnLabel.text(labelChosen + ' ' + count + ' ' + labelFiles);
         });
+
         myDropzone.on("success", function(file, responseText) {
-            //this.removeFile(file);
+            if (responseText !== undefined) {
+                files.push(responseText.shift());
+            } else {
+                files = [];
+            }
         });
+
         myDropzone.on("totaluploadprogress", function(progress) {
             if (!settings.autoQueue) {
                 uploaded = count - myDropzone.getFilesWithStatus(Dropzone.UPLOADING).length;
@@ -80,14 +88,22 @@
                 uploadBtnLabel.text(labelProcess)
             }
         });
+
         myDropzone.on("sending", function(file) {
             // @TODO show preloader
         });
+
         myDropzone.on("queuecomplete", function(progress) {
-            $.nette.ajax({
-                url: uploadSuccess
-            });
             uploadBtnLabel.text(labelDefault);
+
+            $.nette.ajax({
+                url: uploadSuccess,
+                type: 'POST',
+                data: {
+                    'files':files
+                }
+            });
+
             // @TODO hide preloader
         });
 

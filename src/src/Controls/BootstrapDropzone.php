@@ -5,6 +5,7 @@ namespace Vojtys\Controls;
 use Nette;
 use Nette\Http\Request;
 use Nette\Http\Response;
+use Tracy\Debugger;
 use Vojtys\Utils\IUploader;
 use Vojtys\Utils\Uploader;
 
@@ -24,7 +25,7 @@ class BootstrapDropzone extends Nette\Application\UI\Control
     const DEFAULT_AUTO_PROCESS_QUEUE = TRUE;
     const DEFAULT_THUMBNAIL_WIDTH = 50;
     const DEFAULT_THUMBNAIL_HEIGHT = 50;
-    const DEFAULT_PARALLEL_UPLOADS = 20;
+    const DEFAULT_PARALLEL_UPLOADS = 1;
     const DEFAULT_AUTO_QUEUE = FALSE;
     const DEFAULT_PREVIEW_DISABLED = FALSE;
 
@@ -93,14 +94,11 @@ class BootstrapDropzone extends Nette\Application\UI\Control
     /** @var  Nette\Localization\ITranslator */
     protected $translator = NULL;
 
-    /** @var callable  */
-    public $onFileUpload = [];
-
     /** @var callable */
     public $onUploadComplete = [];
 
     /** @var array  */
-    protected $uploaded = [];
+    public $files = [];
 
 
     /**
@@ -156,40 +154,32 @@ class BootstrapDropzone extends Nette\Application\UI\Control
         return $string;
     }
 
+
     public function handleUpload()
     {
-        if ($this->request->files) {
+        $files = $this->request->files;
+        if ($files) {
             $uploader = $this->getUploader();
 
             /** @var Nette\Http\FileUpload $fileUpload */
-            foreach ($this->request->files as $fileUpload) {
-                $this->uploaded[] = $file = $uploader->upload($fileUpload, $this->path);
-
-                // on upload file callback
-                foreach ($this->onFileUpload as $callback) {
-                    if (is_callable($callback)) {
-                        call_user_func($callback, $fileUpload, $file);
-                    }
-                }
+            foreach ($files as $fileUpload) {
+                $file = $uploader->upload($fileUpload, $this->path);
+                $this->setFiles($file);
             }
         }
+
+        $response = new Nette\Application\Responses\JsonResponse($this->getFiles());
+        $response->send($this->request, $this->response);
+        die();
     }
 
-    /**
-     * Files upload success callback
-     */
     public function handleUploadSuccess()
     {
         foreach ($this->onUploadComplete as $callback) {
             if (is_callable($callback)) {
-                call_user_func($callback, $this->uploaded);
+                call_user_func($callback, $this->request->getPost('files'));
             }
         }
-    }
-
-    public function handleRefresh()
-    {
-        $this->redrawControl();
     }
 
     /**
@@ -472,5 +462,25 @@ class BootstrapDropzone extends Nette\Application\UI\Control
         $this->autoProcessQueue = TRUE;
         $this->autoQueue = TRUE;
         return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getFiles() {
+        return $this->files;
+    }
+
+    /**
+     * @param $file
+     */
+    public function setFiles($file) {
+        array_push($this->files, $file);
+    }
+
+
+    public function handleRefresh()
+    {
+        $this->redrawControl();
     }
 }
