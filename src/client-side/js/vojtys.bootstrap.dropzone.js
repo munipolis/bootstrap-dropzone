@@ -104,6 +104,7 @@
                 }
             });
 
+            files = [];
             // @TODO hide preloader
         });
 
