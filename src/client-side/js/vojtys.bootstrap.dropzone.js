@@ -3,6 +3,8 @@
     /* jshint laxbreak: true, expr: true */
     "use strict";
 
+    var PRELOADER_ANIMATION_DURATION = 150;
+
     // Init default objects
     var Vojtys = window.Vojtys || {};
 
@@ -49,6 +51,7 @@
             labelUploaded = $element.data('vojtys-dropzone-uploaded'),
             labelProcess = $element.data('vojtys-dropzone-process'),
             uploadBtnLabel = $element.find(settings.clickable + ' .upload-btn-label'),
+            preloader = $element.find('.dropzone-preloader'),
             uploaded = 0,
             count = 0;
         var labelDefault = uploadBtnLabel.text();
@@ -90,7 +93,7 @@
         });
 
         myDropzone.on("sending", function(file) {
-            // @TODO show preloader
+            preloader.show(PRELOADER_ANIMATION_DURATION);
         });
 
         myDropzone.on("queuecomplete", function(progress) {
@@ -105,7 +108,7 @@
             });
 
             files = [];
-            // @TODO hide preloader
+            preloader.hide(PRELOADER_ANIMATION_DURATION);
         });
 
         var startBtn = document.querySelector('#' + id + ' .start');
