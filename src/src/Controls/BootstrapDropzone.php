@@ -29,7 +29,9 @@ class BootstrapDropzone extends Nette\Application\UI\Control
     const DEFAULT_AUTO_QUEUE = FALSE;
     const DEFAULT_PREVIEW_DISABLED = FALSE;
     const DEFAULT_MAX_FILE_SIZE = 50;
-    const DEFAULT_MAX_FILES = 50;
+    const DEFAULT_MAX_FILES = 100;
+    const DEFAULT_TOO_BIG_FILE_MSG = 'Soubor je příliž velký.';
+    const DEFAULT_INVALID_FILE_TYPE_MSG = 'Nepovolený typ souboru.';
 
 
     /** @var string  */
@@ -62,8 +64,14 @@ class BootstrapDropzone extends Nette\Application\UI\Control
     /** @var int  */
     protected $maxFiles = self::DEFAULT_MAX_FILES;
 
-    /** @var  array */
+    /** @var  string */
     protected $acceptedFiles;
+
+    /** @var  string */
+    protected $tooBigMessage = self::DEFAULT_TOO_BIG_FILE_MSG;
+
+    /** @var string */
+    protected $invalidFileTypeMessage = self::DEFAULT_INVALID_FILE_TYPE_MSG;
 
     /**
      * Define the container to display the previews
@@ -134,7 +142,9 @@ class BootstrapDropzone extends Nette\Application\UI\Control
         $template->setTranslator($this->getTranslator());
         $template->setFile(dirname(__FILE__) . '/' . $this->bdTemplate);
         $template->settings = json_encode([
-            'maxFileSize' => $this->getMaxFileSize(),
+            'maxFilesize' => $this->getMaxFileSize(),
+            'dictFileTooBig' => $this->getTooBigMessage(),
+            'dictInvalidFileType' => $this->getInvalidFileTypeMessage(),
             'maxFiles' => $this->getMaxFiles(),
             'acceptedFiles' => $this->getAcceptedFiles(),
             'thumbnailWidth' => $this->getThumbnailWidth(),
@@ -525,7 +535,7 @@ class BootstrapDropzone extends Nette\Application\UI\Control
     }
 
     /**
-     * @return array
+     * @return string
      */
     public function getAcceptedFiles()
     {
@@ -533,13 +543,44 @@ class BootstrapDropzone extends Nette\Application\UI\Control
     }
 
     /**
-     * @param array $acceptedFiles
+     * @param string $acceptedFiles
      */
     public function setAcceptedFiles($acceptedFiles)
     {
         $this->acceptedFiles = $acceptedFiles;
     }
 
+    /**
+     * @return string
+     */
+    public function getTooBigMessage()
+    {
+        return $this->tooBigMessage;
+    }
+
+    /**
+     * @param string $tooBigMessage
+     */
+    public function setTooBigMessage($tooBigMessage)
+    {
+        $this->tooBigMessage = $tooBigMessage;
+    }
+
+    /**
+     * @return string
+     */
+    public function getInvalidFileTypeMessage()
+    {
+        return $this->invalidFileTypeMessage;
+    }
+
+    /**
+     * @param string $invalidFileTypeMessage
+     */
+    public function setInvalidFileTypeMessage($invalidFileTypeMessage)
+    {
+        $this->invalidFileTypeMessage = $invalidFileTypeMessage;
+    }
 
     public function handleRefresh()
     {

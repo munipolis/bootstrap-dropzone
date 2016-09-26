@@ -61,6 +61,7 @@
         previewNode.parentNode.removeChild(previewNode);
         settings = $.extend({}, settings, {'previewTemplate' : previewTemplate});
 
+        //console.log(settings);
         var myDropzone = new Dropzone($element.get(0), settings);
 
         /* DROPZONE EVENTS -------------------------------------------------------------------------------------------*/
@@ -94,6 +95,10 @@
 
         myDropzone.on("sending", function(file) {
             preloader.show(PRELOADER_ANIMATION_DURATION);
+        });
+
+        myDropzone.on("error", function(file, errorMessage, xhr) {
+            alert(errorMessage + '(' + file.name + ')');
         });
 
         myDropzone.on("queuecomplete", function(progress) {
