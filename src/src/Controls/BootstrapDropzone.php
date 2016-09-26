@@ -28,6 +28,8 @@ class BootstrapDropzone extends Nette\Application\UI\Control
     const DEFAULT_PARALLEL_UPLOADS = 1;
     const DEFAULT_AUTO_QUEUE = FALSE;
     const DEFAULT_PREVIEW_DISABLED = FALSE;
+    const DEFAULT_MAX_FILE_SIZE = 50;
+    const DEFAULT_MAX_FILES = 50;
 
 
     /** @var string  */
@@ -53,6 +55,15 @@ class BootstrapDropzone extends Nette\Application\UI\Control
 
     /** @var bool  */
     protected $autoProcessQueue = self::DEFAULT_AUTO_PROCESS_QUEUE;
+
+    /** @var int  */
+    protected $maxFileSize = self::DEFAULT_MAX_FILE_SIZE;
+
+    /** @var int  */
+    protected $maxFiles = self::DEFAULT_MAX_FILES;
+
+    /** @var  array */
+    protected $acceptedFiles;
 
     /**
      * Define the container to display the previews
@@ -123,6 +134,9 @@ class BootstrapDropzone extends Nette\Application\UI\Control
         $template->setTranslator($this->getTranslator());
         $template->setFile(dirname(__FILE__) . '/' . $this->bdTemplate);
         $template->settings = json_encode([
+            'maxFileSize' => $this->getMaxFileSize(),
+            'maxFiles' => $this->getMaxFiles(),
+            'acceptedFiles' => $this->getAcceptedFiles(),
             'thumbnailWidth' => $this->getThumbnailWidth(),
             'thumbnailHeight' => $this->getThumbnailHeight(),
             'parallelUploads' => $this->getParallelUploads(),
@@ -476,6 +490,54 @@ class BootstrapDropzone extends Nette\Application\UI\Control
      */
     public function setFiles($file) {
         array_push($this->files, $file);
+    }
+
+    /**
+     * @return int
+     */
+    public function getMaxFileSize()
+    {
+        return $this->maxFileSize;
+    }
+
+    /**
+     * @param int $maxFileSize
+     */
+    public function setMaxFileSize($maxFileSize)
+    {
+        $this->maxFileSize = $maxFileSize;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMaxFiles()
+    {
+        return $this->maxFiles;
+    }
+
+    /**
+     * @param int $maxFiles
+     */
+    public function setMaxFiles($maxFiles)
+    {
+        $this->maxFiles = $maxFiles;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAcceptedFiles()
+    {
+        return $this->acceptedFiles;
+    }
+
+    /**
+     * @param array $acceptedFiles
+     */
+    public function setAcceptedFiles($acceptedFiles)
+    {
+        $this->acceptedFiles = $acceptedFiles;
     }
 
 
