@@ -8,7 +8,7 @@ use Nette;
  * Class Uploader
  * @package Vojtys\Utils
  */
-class Uploader extends Nette\Object implements IUploader
+class Uploader implements IUploader
 {
     protected $wwwDir;
 

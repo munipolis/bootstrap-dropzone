@@ -10,7 +10,7 @@ use Nette\Http\Response;
  * Class BootstrapDropzoneFactory
  * @package Vojtys\Controls
  */
-class BootstrapDropzoneFactory extends Nette\Object implements IBootstrapDropzone
+class BootstrapDropzoneFactory implements IBootstrapDropzone
 {
     /** @var  Request */
     protected $request;
