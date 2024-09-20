@@ -1,5 +1,5 @@
 {
-    "name": "vojtys/bootstrap-dropzone",
+    "name": "munipolis/bootstrap-dropzone",
     "description": "Bootstrap Dropzonejs (www.dropzonejs.com) for Nette",
     "type": "library",
     "license": ["BSD-3-Clause"],
